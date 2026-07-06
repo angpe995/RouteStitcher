@@ -1,0 +1,37 @@
+<div class="ticket-search">
+  <div class="ticket-search__header">
+    <h2>Ticket Search</h2>
+  </div>
+  <div class="ticket-search__body">
+    <form class="ticket-search__form" (ngSubmit)="onSubmit()">
+      <div class="ticket-search__form-group">
+        <div class="form-group">
+            <label class="form-label" for="searchTerm">From:</label>
+            <input class="ticket-search__input" type="text" list="station-options" placeholder="Bydgoszcz">
+            <datalist id="station-options">
+                @for 
+                (station of stationsList; track station.id) 
+                {
+                    <option [value]="station.name"></option>
+                }
+            </datalist>
+        </div>
+        <div class="form-group">
+            <label class="form-label" for="searchTerm">To:</label>
+            <input class="ticket-search__input" type="text" list="station-options" placeholder="Warszawa">
+            <datalist id="station-options">
+                @for (station of stationsList; track station.id)
+                {
+                    <option [value]="station.name"></option>
+                }
+            </datalist>
+        </div>
+        <div class="form-group">
+            <label class="form-label" for="searchTerm">Date:</label>
+            <input class="ticket-search__input" type="date" id="searchTerm" name="searchTerm" [(ngModel)]="searchTerm" required>
+        </div>
+      </div>
+      <button class="ticket-search__button" type="submit">Search Tickets</button>
+    </form>
+  </div>
+</div>
