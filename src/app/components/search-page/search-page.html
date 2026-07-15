@@ -1,0 +1,5 @@
+<div class="results-container">
+  @for (conn of connections; track conn.id) {
+    <app-connection-card [connection]="conn"></app-connection-card>
+  }
+</div>

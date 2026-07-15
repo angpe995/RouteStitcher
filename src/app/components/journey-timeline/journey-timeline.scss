@@ -1,0 +1,106 @@
+.timeline-bar {
+  --bar-height: 8px;
+  --bar-min-width: 140px;
+  
+  --seg-border-width: 2px;
+  --seg-border-radius: 3px;
+  --seg-margin: 0 1px;
+  
+  --line-width: 3px;
+ --total-height: calc(var(--bar-height) + (var(--seg-border-width) * 2));
+  
+  --cut-offset-min: 0px;
+  --cut-offset-max: 5px;
+  --cut-diff: calc(var(--cut-offset-max) - var(--cut-offset-min));
+  --line-skew: calc(atan2(var(--cut-diff), var(--total-height)) * -1);
+  --line-right-pos: 3.5px;
+  --line-left-pos: 0.2px;
+  
+  --stripe-solid: 2px;
+  --stripe-space: 8px;
+  /* ---------------------------- */
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--bar-height);
+  width: 100%;
+  min-width: var(--bar-min-width);
+}
+
+.segment {
+  position: relative;
+  height: var(--bar-height);
+  border: var(--seg-border-width) solid var(--segment-color);
+  border-radius: var(--seg-border-radius);
+  margin: var(--seg-margin);
+}
+.segment:is(.normal, .standing).even.cut { 
+  --seg-margin: 0 -0.5px;
+  border-right: none; 
+  clip-path: polygon( 
+    0 0, 
+    calc(100% - var(--cut-offset-min)) 0, 
+    calc(100% - var(--cut-offset-max)) 100%, 
+    0 100% 
+  );
+}
+.segment:is(.normal, .standing).odd.cut { 
+  --seg-margin: 0 -0.5px;
+  border-left: none; 
+  clip-path: polygon( 
+    var(--cut-offset-max) 0, 
+    100% 0, 
+    100% 100%, 
+    var(--cut-offset-min) 100% 
+  ); 
+}
+
+.segment:is(.normal, .standing).two.cut {
+  border-left: none;
+  border-right: none;
+  --seg-margin: 0 -0.5px;
+  clip-path: polygon(
+    var(--cut-offset-max) 0,
+    calc(100% - var(--cut-offset-min)) 0,
+    calc(100% - var(--cut-offset-max)) 100%,
+    var(--cut-offset-min) 100%
+  );
+}
+/* --- СМУГАСТИЙ ФОН --- */
+.segment:is(.normal, .standing):is(.odd, .two).cut::before,
+.segment:is(.normal, .standing):is(.even, .two).cut::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: var(--line-width);
+  height: 100%;
+  background-color: var(--segment-color); 
+  transform: skewX(var(--line-skew)); 
+  transform-origin: bottom; 
+  z-index: 2;
+}
+
+/* 
+  Ліва лінія (активна для непарних .odd та двосторонніх .two)
+*/
+.segment:is(.normal, .standing):is(.odd, .two).cut::before {
+  left: var(--line-left-pos);
+}
+
+/* 
+  Права лінія (активна для парних .even та двосторонніх .two)
+*/
+.segment:is(.normal, .standing):is(.even, .two).cut::after {
+  right: var(--line-right-pos);
+}
+.segment.standing {
+  background-color: transparent;
+  background-image: repeating-linear-gradient(
+    -45deg, 
+    var(--segment-color) 0px, 
+    var(--segment-color) var(--stripe-solid), 
+    transparent var(--stripe-solid), 
+    transparent var(--stripe-space)
+  );
+}

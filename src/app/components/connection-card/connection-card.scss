@@ -1,0 +1,165 @@
+.card {
+    --padding-routes-left: 5px;
+    --padding-routes-right: 5px;
+    --padding-routes-top: 2px;
+    --padding-routes-bottom: 2px;
+    --gap-routes: 20px;
+    
+    --card-padding: 20px;
+    --card-border-radius: 17px;
+    --card-font-size: 14px;
+    
+    --label-border-radius: 3px;
+    
+    --btn-padding: 10px;
+    --btn-margin: 5px;
+    --btn-border-radius: 3px;
+    --btn-font-size: 15px;
+    --btn-font-weight: bold;
+    --btn-flex-dir: right;
+    
+    --stations-font-size: 15px;
+    --stations-gap: 5px;
+    
+    --time-padding-right: 10px;
+    --time-gap: 15px;
+    --time-font-size: 15px;
+    --time-font-weight: bold;
+
+    --times-min-width: 340px;
+    --times-max-width:340px;
+    
+    --node-margin-left: 10px;
+    
+    --circle-size: 8px;
+    --circle-border-width: 5px;
+    --circle-start-bg: white;
+    
+    --line-width: 50px;
+    --line-height: 4px;
+    --line-margin-left: -2px;
+    
+    --duration-font-size: 10px;
+    --duration-font-weight: light;
+    
+    --span-font-size: 12px;
+    --span-max-width: 55px;
+    --span-min-width: 55px;
+    
+    --timeline-margin: 0 5px;
+
+    background-color: var(--card-color);
+    display: flex;
+    padding: var(--card-padding);
+    gap: var(--gap-routes);
+    border-radius: var(--card-border-radius);
+    font-size: var(--card-font-size);
+    justify-content: space-between;
+}
+
+.route-info-labels {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-routes);
+    flex-direction: row;
+}
+
+.route-info_label {
+    padding-left: var(--padding-routes-left);
+    padding-right: var(--padding-routes-right);
+    padding-top: var(--padding-routes-top);
+    padding-bottom: var(--padding-routes-bottom);
+    border-radius: var(--label-border-radius);
+    color: var(--card-button-font-color);
+    background-color: var(--segment-color);
+}
+
+.card__button {
+    padding: var(--btn-padding);
+    margin: var(--btn-margin);
+    border-radius: var(--btn-border-radius);
+    border: none;
+    font-size: var(--btn-font-size);
+    font-weight: var(--btn-font-weight);
+    background-color: var(--card-button-color);
+    color: var(--card-button-font-color);
+    flex-direction: var(--btn-flex-dir);
+    cursor: pointer;
+}
+
+.route-info__stations {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    font-size: var(--stations-font-size);
+    gap: var(--stations-gap);
+}
+
+.route-info__times {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    min-width: var(--times-min-width);
+    max-width: var(--times-max-width);
+}
+
+.route-info-time {
+    display: flex;
+    flex-direction: row;
+    padding-right: var(--time-padding-right);
+    gap: var(--time-gap);
+    font-size: var(--time-font-size);
+    font-weight: var(--time-font-weight);
+}
+
+.timeline-node {
+    display: flex;
+    align-items: center;
+    margin-left: var(--node-margin-left);
+}
+
+.circle {
+    width: var(--circle-size);
+    height: var(--circle-size);
+    border: var(--circle-border-width) solid var(--node-active);
+    border-radius: 50%;
+    z-index: 2;
+}
+
+.circle.start {
+    background-color: var(--circle-start-bg);
+}
+
+.circle.end {
+    background-color: var(--node-active);
+}
+
+.line {
+    width: var(--line-width);
+    height: var(--line-height);
+    background-color: var(--node-active);
+    margin-left: var(--line-margin-left);
+}
+
+.route-info-time.duration {
+    font-size: var(--duration-font-size);
+    color: var(--node-active);
+    font-weight: var(--duration-font-weight);
+}
+
+.route-info__station-span {
+    font-size: var(--span-font-size);
+    display: inline-block;
+    max-width: var(--span-max-width);
+    min-width: var(--span-min-width);
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+app-journey-timeline {
+    flex: 1;
+    margin: var(--timeline-margin);
+}

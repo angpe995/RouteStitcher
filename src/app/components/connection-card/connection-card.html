@@ -1,0 +1,49 @@
+<div class="card">
+       <div class="route-info">
+        <div class="route-info__times">
+            <div class='route-info-time start'>
+                {{ connection.startTime }}
+                <div class="timeline-node">
+                        <div class="circle start"></div>
+                        <div class="line"></div>
+                </div>
+            </div>
+            <div class='route-info-time duration'>
+                {{ connection.duration }}
+</div>
+            <div class='route-info-time end'>
+                <div class="timeline-node">
+                    <div class="line"></div>
+                    <div class="circle end"></div>        
+                </div>
+                {{ connection.endTime }}
+            </div>
+        </div>
+        <div class="route-info__stations">
+            <div class='route-info-station'>
+                <span class="route-info__station-span">{{ connection.segments[0].fromStation }}</span>
+            </div>
+             <app-journey-timeline [segments]="connection.segments"></app-journey-timeline>
+            <div class='route-info-station'>
+                <span class="route-info__station-span">{{ connection.segments[connection.segments.length - 1].toStation }}</span>
+            </div>
+        </div>
+       
+      </div>
+      <div class="route-info-labels">
+             @for(segment of connection.segments; track $index) {
+                @if(!$last)
+                {
+                    @if(segment.trainId!=connection.segments[$index+1].trainId)
+                    {
+                        <div class="route-info_label"[style.--segment-color]="segment.trainBrand ? getBrandColor(segment.trainBrand) : 'black'">{{segment.trainBrand}}</div>
+                    }
+                }
+                @else {
+                        <div  class="route-info_label" [style.--segment-color]="segment.trainBrand ? getBrandColor(segment.trainBrand) : 'black'">{{segment.trainBrand}}
+                     </div>
+                }
+             }
+       </div>
+       <button class="card__button" (click)="buyTicket()">BUY TICKET</button>
+</div>
