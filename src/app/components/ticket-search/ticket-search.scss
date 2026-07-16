@@ -5,12 +5,14 @@
 .body{
     font-family: sansSerif;
 }
+
 .ticket-search__body{
     background-color: rgba(234, 248, 248, 0.76);
     padding: 20px;
     display: flex;
     gap: 20px;
     border-radius: 17px;
+    flex-direction: column;
    
 }
 .form-group{
