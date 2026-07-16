@@ -1,10 +1,14 @@
 <div class="timeline-bar">
   @for(segment of segments; track $index) {
-    <div class="segment" 
-         [style.width.%]="100 / segments.length"
-         [ngClass]="getSegmentClass($index,  $last)"
-         [style.--segment-color]="segment.trainBrand ? getBrandColor(segment.trainBrand) : 'black'">
-    </div>
-    
-  }
+      <div class="segment-wrapper">
+          <div class="segment" 
+            [ngClass]="getSegmentClass($index,  $last)"
+            [style.--segment-color]="segment.trainBrand ? getBrandColor(segment.trainBrand) : 'black'">
+          </div>
+          <span class="station-tooltip">
+            {{ segment.fromStation }} 
+            {{ segment.hasSeat ? ('car '+segment.seatInfo?.car + ' seat ' + segment.seatInfo?.seat) : 'brak' }}
+          </span>
+      </div>
+    }
 </div>

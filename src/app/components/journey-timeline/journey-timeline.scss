@@ -4,7 +4,7 @@
   
   --seg-border-width: 2px;
   --seg-border-radius: 3px;
-  --seg-margin: 0 1px;
+  --seg-margin: 0 3px;
   
   --line-width: 3px;
  --total-height: calc(var(--bar-height) + (var(--seg-border-width) * 2));
@@ -18,7 +18,12 @@
   
   --stripe-solid: 2px;
   --stripe-space: 8px;
-  /* ---------------------------- */
+
+  --tooltip-bg: #1a1a1a;
+  --tooltip-color: #ffffff;
+  --tooltip-font-size: 11px;
+  --tooltip-padding: 4px 8px;
+  --tooltip-border-radius: 4px;
 
   display: flex;
   align-items: center;
@@ -27,16 +32,21 @@
   width: 100%;
   min-width: var(--bar-min-width);
 }
-
+.segment-wrapper {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  margin:var(--seg-margin)
+}
 .segment {
   position: relative;
   height: var(--bar-height);
   border: var(--seg-border-width) solid var(--segment-color);
   border-radius: var(--seg-border-radius);
-  margin: var(--seg-margin);
+  width: 100%;
 }
 .segment:is(.normal, .standing).even.cut { 
-  --seg-margin: 0 -0.5px;
   border-right: none; 
   clip-path: polygon( 
     0 0, 
@@ -46,7 +56,6 @@
   );
 }
 .segment:is(.normal, .standing).odd.cut { 
-  --seg-margin: 0 -0.5px;
   border-left: none; 
   clip-path: polygon( 
     var(--cut-offset-max) 0, 
@@ -59,7 +68,6 @@
 .segment:is(.normal, .standing).two.cut {
   border-left: none;
   border-right: none;
-  --seg-margin: 0 -0.5px;
   clip-path: polygon(
     var(--cut-offset-max) 0,
     calc(100% - var(--cut-offset-min)) 0,
@@ -67,7 +75,6 @@
     var(--cut-offset-min) 100%
   );
 }
-/* --- СМУГАСТИЙ ФОН --- */
 .segment:is(.normal, .standing):is(.odd, .two).cut::before,
 .segment:is(.normal, .standing):is(.even, .two).cut::after {
   content: '';
@@ -80,17 +87,9 @@
   transform-origin: bottom; 
   z-index: 2;
 }
-
-/* 
-  Ліва лінія (активна для непарних .odd та двосторонніх .two)
-*/
 .segment:is(.normal, .standing):is(.odd, .two).cut::before {
   left: var(--line-left-pos);
 }
-
-/* 
-  Права лінія (активна для парних .even та двосторонніх .two)
-*/
 .segment:is(.normal, .standing):is(.even, .two).cut::after {
   right: var(--line-right-pos);
 }
@@ -103,4 +102,38 @@
     transparent var(--stripe-solid), 
     transparent var(--stripe-space)
   );
+}
+.station-tooltip {
+  position: absolute;
+  bottom: calc(100% + 6px); 
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  
+  background-color: var(--tooltip-bg);
+  color: var(--tooltip-color);
+  font-size: var(--tooltip-font-size);
+  padding: var(--tooltip-padding);
+  border-radius: var(--tooltip-border-radius);
+  white-space: nowrap; 
+  z-index: 10;
+  
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.station-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 4px;
+  border-style: solid;
+  border-color: var(--tooltip-bg) transparent transparent transparent;
+}
+
+.segment-wrapper:hover .station-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
