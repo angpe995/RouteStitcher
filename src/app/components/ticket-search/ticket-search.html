@@ -7,10 +7,10 @@
       <div class="ticket-search__form-group">
         <div class="form-group">
             <label class="form-label" for="searchTerm">From:</label>
-            <input class="ticket-search__input" type="text" list="station-options" placeholder="Bydgoszcz">
-            <datalist id="station-options">
+            <input [(ngModel)]="fromStation" list="stations" class="ticket-search__input" name="fromStation" (ngModelChange)="search(fromStation)"  placeholder="Bydgoszcz">
+            <datalist id="fromStations">
                 @for 
-                (station of stationsList; track station.id) 
+                (station of filteredStations; track station.id) 
                 {
                     <option [value]="station.name"></option>
                 }
@@ -18,9 +18,9 @@
         </div>
         <div class="form-group">
             <label class="form-label" for="searchTerm">To:</label>
-            <input class="ticket-search__input" type="text" list="station-options" placeholder="Warszawa">
-            <datalist id="station-options">
-                @for (station of stationsList; track station.id)
+            <input [(ngModel)]="toStation" list="stations" class="ticket-search__input" name="toStation" (ngModelChange)="search(toStation)"  placeholder="Warszawa">
+            <datalist id="stations">
+                @for (station of filteredStations; track station.id)
                 {
                     <option [value]="station.name"></option>
                 }
@@ -28,7 +28,7 @@
         </div>
         <div class="form-group">
             <label class="form-label" for="searchTerm">Date:</label>
-            <input class="ticket-search__input" type="date" id="searchTerm" name="searchTerm" [(ngModel)]="searchTerm" required>
+            <input [(ngModel)]="travelDate"  type="date" name="travelDate">
         </div>
       </div>
       <button class="ticket-search__button" type="submit">Search Tickets</button>
