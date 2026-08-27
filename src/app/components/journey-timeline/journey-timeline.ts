@@ -1,25 +1,20 @@
 import { Component, Input } from '@angular/core';
-import { JourneySegment } from '../connection-card/connection.model';
+import { JourneySegment} from '../connection-card/connection.model';
 import { NgClass } from '@angular/common';
+import { BrandService } from '../../services/brand.service';
+import { Brand} from '../connection-card/connection.model';
 @Component({
   selector: 'app-journey-timeline',
   imports: [NgClass],
   templateUrl: './journey-timeline.html',
   styleUrl: './journey-timeline.scss',
 })
+
+
 export class JourneyTimeline {
   @Input({ required: true }) segments: JourneySegment[] = [];
-  getBrandColor(brand: string): string {
-    switch (brand) {
-      case 'IC':
-        return '#FFB158';
-      case 'PR':
-        return '#BB4430';
-      case 'TLK':
-        return '#ffb938';
-      default:
-        return '#34357C';
-    }
+  getBrandColor(brand: Brand): string {
+    return brand.color;
   } 
   getSegmentStatus(current: JourneySegment, previous: JourneySegment | null): string {
   if (!previous) {

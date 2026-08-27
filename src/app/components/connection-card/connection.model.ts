@@ -7,14 +7,11 @@ export interface JourneySegment {
   fromStation: string;
   toStation: string;
   
-  trainBrand: string;
+  trainBrand: Brand;
   trainId: string;
   
   hasSeat: boolean;
   seatInfo?: SeatInfo;
-  
-  departureTime?: string;
-  arrivalTime?: string;
 }
 
 export interface ConnectionDetail {
@@ -25,7 +22,71 @@ export interface ConnectionDetail {
   segments: JourneySegment[];
 
 }
+export interface ApiCheckedSegment {
+  train_nr: number;
+  train_name: string;
+  brand_id: number;
+  station_origin: number;
+  station_destination: number;
+  departure: string;
+  arrival: string;
+  available: boolean;
+}
+export interface ApiCheckedConnection {
+  train_nr: number;
+  origin_station_id: number;
+  destination_station_id: number;
+  routeVariant: {
+    brand_id: number,
+    type: string;
+    segments: ApiCheckedSegment[];
+    coveredDuration: number;
+    coverage: number;
+  };
+}
+export interface ConnectionResponse {
+  uuid: string;
+  departure: string;
+  arrival: string;
+  duration: number;
+  legs: ApiLeg[];
+  changes: number;
+  constrictions: unknown[];
+  origin_station_id: number;
+  destination_station_id: number;
+  eol_response_version: number;
+}
+export interface ApiLeg {
+  train_id: number;
+  train_nr: number;
+  train_name: string;
+  train_full_name: string;
 
+  operating_day: string;
+
+  commercial_brand_id: number;
+  internal_brand_id: number;
+
+  origin_station_id: number;
+  destination_station_id: number;
+
+  departure: string;
+  arrival: string;
+  duration: number;
+
+  departure_platform: string;
+  departure_track: string;
+
+  arrival_platform: string;
+  arrival_track: string;
+
+  stops_before_leg: unknown[];
+  stops_in_leg: unknown[];
+  stops_after_leg: unknown[];
+
+  leg_type: string;
+  attributes: unknown[];
+}
 function timeToMinutes(timeStr: string): number {
 
   const [hours, minutes] = timeStr.split(':').map(Number);
@@ -69,152 +130,8 @@ export function calculateDuration(startTime: string, endTime: string): string {
   return minutesToTime(diff);
 
 }
-
-export const MOCK_CONNECTIONS: ConnectionDetail[] = [
-  {
-    id: '1',
-    startTime: '16:40',
-    endTime: '19:46',
-    segments: [
-      {
-        fromStation: 'Katowice',
-        toStation: 'Gdańsk Główny',
-        trainBrand: 'IC',
-        trainId: 'IC-4520',
-        hasSeat: true,
-        seatInfo: { car: '4', seat: '22' }
-      }
-    ],
-  },
-  {
-    id: '2',
-    startTime: '16:40',
-    endTime: '22:15',
-    // Прямий рейс, але на другій частині шляху втрачається гарантія місця (Katowice -> Kutno -> Gdańsk)
-    segments: [
-      {
-        fromStation: 'Katowice',
-        toStation: 'Kutno',
-        trainBrand: 'PR',
-        trainId: 'PR-44111',
-        hasSeat: true,
-        seatInfo: { car: '1', seat: '15' }
-      },
-      {
-        fromStation: 'Kutno',
-        toStation: 'Gdańsk Główny',
-        trainBrand: 'PR',
-        trainId: 'PR-44111',
-        hasSeat: false // brak gwarancji miejsca
-      }
-    ]
-  },
-  {
-    id: '3',
-    startTime: '06:15',
-    endTime: '11:45',
-    // Прямий рейс, але зі зміною місця посеред шляху (Katowice -> Warszawa -> Gdańsk)
-    segments: [
-      {
-        fromStation: 'Katowice',
-        toStation: 'Warszawa Centralna',
-        trainBrand: 'EIP',
-        trainId: 'EIP-4500',
-        hasSeat: true,
-        seatInfo: { car: '2', seat: '11' }
-      },
-      {
-        fromStation: 'Warszawa Centralna',
-        toStation: 'Gdańsk Główny',
-        trainBrand: 'EIP',
-        trainId: 'EIP-4500',
-        hasSeat: true,
-        seatInfo: { car: '2', seat: '15' } // Потяг той самий, але пасажир має пересісти
-      }
-    ]
-  },
-  {
-    id: '4',
-    startTime: '08:20',
-    endTime: '14:15',
-    // Класична пересадка з потяга InterCity на регіональний Polregio
-    segments: [
-      {
-        fromStation: 'Katowice',
-        toStation: 'Kraków Główny',
-        trainBrand: 'IC',
-        trainId: 'IC-38100',
-        hasSeat: true,
-        seatInfo: { car: '5', seat: '71' }
-      },
-      {
-        fromStation: 'Kraków Główny',
-        toStation: 'Tarnów',
-        trainBrand: 'PR',
-        trainId: 'PR-39393',
-        hasSeat: false // Регіональні потяги часто без резервації місць
-      }
-    ]
-  },
-  {
-    id: '5',
-    startTime: '11:00',
-    endTime: '18:30',
-    // Пересадка: спочатку їдемо без місця, потім пересідаємо на інший потяг з місцем
-    segments: [
-      {
-        fromStation: 'Warszawa Centralna',
-        toStation: 'Poznań Główny',
-        trainBrand: 'IC',
-        trainId: 'IC-1810',
-        hasSeat: false // Немає вільних місць на цей відрізок
-      },
-      {
-        fromStation: 'Poznań Główny',
-        toStation: 'Szczecin Główny',
-        trainBrand: 'TLK',
-        trainId: 'TLK-88123',
-        hasSeat: true,
-        seatInfo: { car: '7', seat: '44' }
-      }
-    ]
-  },
-  {
-    id: '6',
-    startTime: '22:00',
-    endTime: '07:30',
-    // Складний нічний маршрут: зміна місця, потім втрата місця, і на кінець пересадка
-    segments: [
-       {
-        fromStation: 'Wrocław Główny',
-        toStation: 'Opole Główne',
-        trainBrand: 'IC',
-        trainId: 'IC-6310',
-        hasSeat: true,
-        seatInfo: { car: '1', seat: '14' }
-       },
-       {
-        fromStation: 'Opole Główne',
-        toStation: 'Kraków Główny',
-        trainBrand: 'IC',
-        trainId: 'IC-6310',
-        hasSeat: true,
-        seatInfo: { car: '2', seat: '81' } // Зміна вагона і місця
-       },
-       {
-        fromStation: 'Kraków Główny',
-        toStation: 'Rzeszów Główny',
-        trainBrand: 'IC',
-        trainId: 'IC-6310',
-        hasSeat: false // Далі квиток без гарантії місця
-       },
-       {
-        fromStation: 'Rzeszów Główny',
-        toStation: 'Przemyśl Główny',
-        trainBrand: 'PR',
-        trainId: 'PR-11002',
-        hasSeat: false // Пересадка на ранкову електричку
-       }
-    ]
-  }
-];
+export interface Brand {
+  id: number;
+  name: string;
+  color: string;
+}
