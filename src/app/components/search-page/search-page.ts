@@ -29,11 +29,10 @@ export class SearchPage implements OnChanges {
       connection.id === updatedConnection.id ? updatedConnection : connection,
     );
   }
-  checkingConnectionId:string|null = null;
+  checkingConnectionId: string | null = null;
   connections: ConnectionDetail[] = [];
-  checkingConnection(id:string|null)
-  {
-    this.checkingConnectionId=id;
+  checkingConnection(id: string | null) {
+    this.checkingConnectionId = id;
   }
   constructor(
     private stationService: StationService,
@@ -79,7 +78,7 @@ export class SearchPage implements OnChanges {
 
   private mapConnection(connection: ConnectionResponse): ConnectionDetail {
     const trainLegs = connection.legs.filter((leg) => leg.leg_type === 'train_leg');
-    const segments = trainLegs.map((leg) => this.mapJourneySegment(leg));
+    const segments = trainLegs.map((leg) => this.mapJourneySegment(leg,connection.uuid));
     return {
       id: connection.uuid,
       startTime: this.formatTime(connection.departure),
@@ -88,14 +87,17 @@ export class SearchPage implements OnChanges {
       segments: segments,
     };
   }
-
-  private mapJourneySegment(leg: ApiLeg): JourneySegment {
+  private createTicketUrl( uuid: string): string {
+    return `https://koleo.pl/connection/${uuid}`;
+  }
+  private mapJourneySegment(leg: ApiLeg,uuid:string): JourneySegment {
     return {
       fromStation: this.stationService.getStationName(leg.origin_station_id),
       toStation: this.stationService.getStationName(leg.destination_station_id),
       trainBrand: this.brandService.getBrand(leg.commercial_brand_id),
       trainId: String(leg.train_id),
-      hasSeat: false
+      hasSeat: false,
+      uuid:uuid
     };
   }
 }

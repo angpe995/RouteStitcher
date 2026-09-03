@@ -1,17 +1,19 @@
 export interface SeatInfo {
-  car: string;     // Номер вагона
-  seat: string;    // Номер місця
+  car: string; // Номер вагона
+  seat: string; // Номер місця
 }
 
 export interface JourneySegment {
   fromStation: string;
   toStation: string;
-  
+
   trainBrand: Brand;
   trainId: string;
-  
+  uuid:string;
+
   hasSeat: boolean;
   seatInfo?: SeatInfo;
+  ticketUrl?: string;
 }
 
 export interface ConnectionDetail {
@@ -20,7 +22,6 @@ export interface ConnectionDetail {
   endTime: string;
   duration?: string;
   segments: JourneySegment[];
-
 }
 export interface ApiCheckedSegment {
   train_nr: number;
@@ -31,13 +32,15 @@ export interface ApiCheckedSegment {
   departure: string;
   arrival: string;
   available: boolean;
+  uuid:string;
 }
 export interface ApiCheckedConnection {
+  uuid:string;
   train_nr: number;
   origin_station_id: number;
   destination_station_id: number;
   routeVariant: {
-    brand_id: number,
+    brand_id: number;
     type: string;
     segments: ApiCheckedSegment[];
     coveredDuration: number;
@@ -88,39 +91,28 @@ export interface ApiLeg {
   attributes: unknown[];
 }
 function timeToMinutes(timeStr: string): number {
-
   const [hours, minutes] = timeStr.split(':').map(Number);
 
-  return (hours * 60) + minutes;
-
+  return hours * 60 + minutes;
 }
 
-
-
 function minutesToTime(totalMinutes: number): string {
-
   const isNegative = totalMinutes < 0;
 
   const absMinutes = Math.abs(totalMinutes);
 
-
-
   const hours = Math.floor(absMinutes / 60);
 
   const minutes = absMinutes % 60;
-
-
 
   const formattedHours = String(hours).padStart(2, '0');
 
   const formattedMinutes = String(minutes).padStart(2, '0');
 
   return `${isNegative ? '-' : ''}${formattedHours}:${formattedMinutes}`;
-
 }
 
 export function calculateDuration(startTime: string, endTime: string): string {
-
   const startMinutes = timeToMinutes(startTime);
 
   const endMinutes = timeToMinutes(endTime);
@@ -128,7 +120,6 @@ export function calculateDuration(startTime: string, endTime: string): string {
   const diff = endMinutes - startMinutes;
 
   return minutesToTime(diff);
-
 }
 export interface Brand {
   id: number;

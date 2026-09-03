@@ -15,7 +15,7 @@ export class Check {
     console.log(url);
     return this.http.post<ApiCheckedConnection[]>(url, {
       tickets: 2,
-      placeClass:null,
+      placeClass:5,
     });
   }
 }

@@ -32,36 +32,38 @@ export class ConnectionCard {
     private brandService: BrandService,
   ) {}
   loading: boolean = false;
+  is_checked: boolean = false;
   private mapCheckedConnection(connection: ApiCheckedConnection): JourneySegment[] {
     console.log(connection);
     let fromStation;
     let toStation;
-    let segments: JourneySegment[]=[];
-  
+    let segments: JourneySegment[] = [];
+
     if (connection.routeVariant.segments.length == 0) {
-        console.log(connection);
+      console.log(connection);
       segments.push({
-         fromStation: this.stationService.getStationName(connection.origin_station_id),
+        fromStation: this.stationService.getStationName(connection.origin_station_id),
         toStation: this.stationService.getStationName(connection.destination_station_id),
-         trainBrand: this.brandService.getBrand(connection.routeVariant.brand_id),
+        trainBrand: this.brandService.getBrand(connection.routeVariant.brand_id),
         trainId: String(connection.train_nr),
-        hasSeat: connection.routeVariant.coverage?true:false
+        hasSeat: connection.routeVariant.coverage ? true : false,
+        uuid: connection.uuid,
       });
-     
     } else {
-      segments= connection.routeVariant.segments.map((segment) => ({
+      segments = connection.routeVariant.segments.map((segment) => ({
         fromStation: this.stationService.getStationName(segment.station_origin),
         toStation: this.stationService.getStationName(segment.station_destination),
         trainBrand: this.brandService.getBrand(segment.brand_id),
         trainId: String(segment.train_nr),
         hasSeat: segment.available,
+        uuid: segment.uuid,
       }));
     }
 
     console.log(segments);
     return segments;
   }
-  buyTicket() {
+  checkTicket() {
     this.loading = true;
     this.loadingProperty.emit(this.connection.id);
     this.check
@@ -76,12 +78,37 @@ export class ConnectionCard {
         const segments: JourneySegment[] = result.flatMap((item) =>
           this.mapCheckedConnection(item),
         );
+        console.log('SEGMENTS', segments);
         this.connection = {
           ...this.connection,
           segments,
         };
+        this.is_checked = true;
         this.connectionUpdated.emit(this.connection);
       });
+  }
+  createTicketUrl(uuid: string): string {
+    return 'https://koleo.pl/connection/' + uuid;
+  }
+  buyTicket() {
+    const urls = [];
+    let previous: JourneySegment | null = null;
+    for (const segment of this.connection.segments) {
+      if (previous && previous.uuid !== segment.uuid) {
+        urls.push(this.createTicketUrl(segment.uuid));
+      } else if (!previous) {
+        urls.push(this.createTicketUrl(segment.uuid));
+      }
+      previous = segment;
+    }
+    if (this.connection.segments.length === 0) {
+      window.open(this.createTicketUrl(this.connection.id), '_blank');
+      return;
+    }
+    urls.forEach((url) => {
+      window.open(url, '_blank');
+    });
+    return urls;
   }
   getBrandColor(brand: Brand): string {
     return brand.color;

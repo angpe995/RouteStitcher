@@ -22,7 +22,6 @@ export class StationService {
       }),
       shareReplay(1)
     );
-
   getStations() {
     return this.stations$;
   }

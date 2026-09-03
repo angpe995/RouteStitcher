@@ -56,7 +56,15 @@
       }
     }
   </div>
-  <button class="card__button" [disabled]="!active || loading" (click)="buyTicket()">
-    {{ loading ? 'WAIT' : 'CHECK TICKET' }}
+  <button
+    class="card__button"
+    [disabled]="!active || loading"
+    (click)="is_checked ? buyTicket() : checkTicket()"
+    >
+    @if (is_checked) {
+      BUY TICKET
+    } @else {
+      {{ loading ? 'WAIT' : 'CHECK TICKET' }}
+    }
   </button>
 </div>
