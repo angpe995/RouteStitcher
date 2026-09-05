@@ -1,59 +1,73 @@
 # RouteStitcher
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.18.
+RouteStitcher helps users find train connections, compare route segments, check
+seat availability, and open the relevant ticket purchase links.
+
+## Features
+
+- Search connections by departure station, destination station, and date.
+- Search and select stations from the station list.
+- Display journey timelines with transfers and train brands.
+- Check seat availability for two or three tickets.
+- Open ticket links for the checked route segments.
+
+## Requirements
+
+- Node.js and npm
+- A running RouteStitcher API on `http://localhost:5000`
+
+The frontend sends seat checks to `POST /api/{connectionId}/check`.
+
+## Installation
+
+Install the project dependencies:
+
+```bash
+npm install
+```
 
 ## Development server
 
-To start a local development server, run:
+Start the Angular development server:
 
 ```bash
-ng serve
+npm start
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Then open [http://localhost:4200](http://localhost:4200). The application
+reloads automatically when source files change.
 
-## Code scaffolding
+## Build
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Create a production build in the `dist/` directory:
 
 ```bash
-ng generate component component-name
+npm run build
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Tests
+
+Run the unit tests with Vitest:
 
 ```bash
-ng generate --help
+npm test
 ```
 
-## Building
+## Project structure
 
-To build the project run:
+- `src/app/components/ticket-search` contains the search form and station suggestions.
+- `src/app/components/search-page` loads and displays connection results.
+- `src/app/components/connection-card` displays a connection and ticket actions.
+- `src/app/components/journey-timeline` renders route segments and seat status.
+- `src/app/services` contains API, station, brand, and search services.
 
-```bash
-ng build
-```
+## Technology
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+- Angular 21
+- TypeScript
+- RxJS
+- Angular Forms
+- Vitest
 
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+For Angular CLI documentation, see the
+[Angular CLI documentation](https://angular.dev/tools/cli).
