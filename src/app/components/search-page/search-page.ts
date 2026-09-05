@@ -24,11 +24,7 @@ export class SearchPage implements OnChanges {
     destination: Station;
     date: string;
   } | null = null;
-  updateConnection(updatedConnection: ConnectionDetail) {
-    this.connections = this.connections.map((connection) =>
-      connection.id === updatedConnection.id ? updatedConnection : connection,
-    );
-  }
+  @Input() searchId = 0;
   checkingConnectionId: string | null = null;
   connections: ConnectionDetail[] = [];
   checkingConnection(id: string | null) {
@@ -46,7 +42,7 @@ export class SearchPage implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (this.searchParams) {
+    if (changes['searchId']) {
       this.loadConnections();
     }
   }
@@ -78,7 +74,7 @@ export class SearchPage implements OnChanges {
 
   private mapConnection(connection: ConnectionResponse): ConnectionDetail {
     const trainLegs = connection.legs.filter((leg) => leg.leg_type === 'train_leg');
-    const segments = trainLegs.map((leg) => this.mapJourneySegment(leg,connection.uuid));
+    const segments = trainLegs.map((leg) => this.mapJourneySegment(leg, connection.uuid));
     return {
       id: connection.uuid,
       startTime: this.formatTime(connection.departure),
@@ -87,17 +83,17 @@ export class SearchPage implements OnChanges {
       segments: segments,
     };
   }
-  private createTicketUrl( uuid: string): string {
+  private createTicketUrl(uuid: string): string {
     return `https://koleo.pl/connection/${uuid}`;
   }
-  private mapJourneySegment(leg: ApiLeg,uuid:string): JourneySegment {
+  private mapJourneySegment(leg: ApiLeg, uuid: string): JourneySegment {
     return {
       fromStation: this.stationService.getStationName(leg.origin_station_id),
       toStation: this.stationService.getStationName(leg.destination_station_id),
       trainBrand: this.brandService.getBrand(leg.commercial_brand_id),
       trainId: String(leg.train_id),
       hasSeat: false,
-      uuid:uuid
+      uuid: uuid,
     };
   }
 }

@@ -2,7 +2,6 @@
   @for (conn of connections; track conn.id) {
     <app-connection-card
       [connection]="conn"
-      (connectionUpdated)="updateConnection($event)"
       (loadingProperty)="checkingConnection($event)"
       [active]="conn.id === checkingConnectionId || checkingConnectionId==null"
     ></app-connection-card>
