@@ -171,3 +171,71 @@ app-journey-timeline {
     flex: 1;
     margin: var(--timeline-margin);
 }
+.ticket-count {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.ticket-count__toggle {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+
+  font-size: 18px;
+  font-weight: 500;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 10px 14px;
+}
+
+.ticket-count__toggle span {
+  font-size: 11px;
+  transition: transform 0.2s ease;
+}
+
+.ticket-count__toggle span.open {
+  transform: rotate(180deg);
+}
+
+.ticket-count__dropdown {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+
+  min-width: 130px;
+
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+
+  padding: 5px;
+
+  display: flex;
+  flex-direction: column;
+
+  z-index: 100;
+}
+
+.ticket-count__dropdown button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+
+  padding: 10px 12px;
+  text-align: left;
+
+  font-size: 14px;
+  border-radius: 4px;
+}
+
+.ticket-count__dropdown button:hover {
+  background: #f0f0f0;
+}
+
+.ticket-count__dropdown button.selected {
+  font-weight: bold;
+}

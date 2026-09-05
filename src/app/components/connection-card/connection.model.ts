@@ -27,8 +27,8 @@ export interface ApiCheckedSegment {
   train_nr: number;
   train_name: string;
   brand_id: number;
-  station_origin: number;
-  station_destination: number;
+  origin_station_id: number;
+  destination_station_id: number;
   departure: string;
   arrival: string;
   available: boolean;

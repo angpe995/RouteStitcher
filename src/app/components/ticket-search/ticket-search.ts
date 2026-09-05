@@ -11,6 +11,7 @@ import { StationService } from '../../services/station.service';
   styleUrl: './ticket-search.scss',
 })
 export class TicketSearch {
+  searchId = 0;
   showResults = false;
   fromStation = '';
   toStation = '';
@@ -34,7 +35,7 @@ export class TicketSearch {
     if (!departure || !destination || !this.travelDate) {
       return;
     }
-
+    this.searchId++;
     this.searchParams = {
       departure,
       destination,

@@ -10,12 +10,12 @@ import { ConnectionCard } from '../components/connection-card/connection-card';
 })
 export class Check {
   private http = inject(HttpClient);
-  checkConnection(connection: ConnectionDetail) {
+  checkConnection(connection: ConnectionDetail, NumberOfTickets: number, placeClass: number | null = null): Observable<ApiCheckedConnection[]> {
     const url = `http://localhost:5000/api/${connection.id}/check`;
     console.log(url);
     return this.http.post<ApiCheckedConnection[]>(url, {
-      tickets: 2,
-      placeClass:5,
+      tickets: NumberOfTickets,
+      placeClass: placeClass,
     });
   }
 }

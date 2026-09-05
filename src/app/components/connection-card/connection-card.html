@@ -23,7 +23,7 @@
       <div class="route-info-station">
         <span class="route-info__station-span">{{ connection.segments[0].fromStation }}</span>
       </div>
-      <app-journey-timeline [segments]="connection.segments"></app-journey-timeline>
+      <app-journey-timeline [segments]="checkedSegments.length ? checkedSegments : connection.segments"></app-journey-timeline>
       <div class="route-info-station">
         <span class="route-info__station-span">{{
           connection.segments[connection.segments.length - 1].toStation
@@ -56,6 +56,36 @@
       }
     }
   </div>
+  <div class="ticket-count">
+  <button
+    type="button"
+    class="ticket-count__toggle"
+    (click)="showTicketOptions = !showTicketOptions"
+  >
+    Tickets: {{ ticketCount }}
+    <span [class.open]="showTicketOptions">▲</span>
+  </button>
+
+  @if (showTicketOptions) {
+    <div class="ticket-count__dropdown">
+      <button
+        type="button"
+        [class.selected]="ticketCount === 2"
+        (click)="selectTicketCount(2)"
+      >
+        2 tickets
+      </button>
+
+      <button
+        type="button"
+        [class.selected]="ticketCount === 3"
+        (click)="selectTicketCount(3)"
+      >
+        3 tickets
+      </button>
+    </div>
+  }
+</div>
   <button
     class="card__button"
     [disabled]="!active || loading"

@@ -38,46 +38,57 @@ export class JourneyTimeline {
   private isSeatChanged(a?: JourneySegment, b?: JourneySegment): boolean {
     if (!a || !b) return false;
     if (a.trainId !== b.trainId) return false;
-    if (a.hasSeat !== b.hasSeat) return true;
-    if (a.hasSeat && b.hasSeat && (a.seatInfo || b.seatInfo)) {
-      return a.seatInfo?.car !== b.seatInfo?.car || a.seatInfo?.seat !== b.seatInfo?.seat;
-    }
-    return false;
+    return true;
   }
 
   getSegmentClass(index: number, isLast: boolean): string {
     const current = this.segments[index];
-    if (!current) return '';
 
-    const isFirst = index === 0;
+    if (!current) {
+      return '';
+    }
+
     const type = current.hasSeat ? 'normal' : 'standing';
     const classes = [type];
-    if (!isFirst && !isLast) {
-      const prev = this.segments[index - 1];
-      const next = this.segments[index + 1];
 
-      const cutLeft = this.isSeatChanged(prev, current);
-      const cutRight = this.isSeatChanged(current, next);
+    const isFirst = index === 0;
 
-      if (cutLeft && cutRight) {
-        classes.push('two', 'cut');
-      } else if (cutRight) {
-        classes.push(type === 'normal' ? 'even' : 'odd', 'cut');
-      } else if (cutLeft) {
-        classes.push('odd', 'cut');
-      }
-    } else {
-      const neighbour = isLast ? this.segments[index - 1] : this.segments[index + 1];
-      if (this.isSeatChanged(current, neighbour)) {
-        if (type === 'normal') {
-          classes.push(isLast ? 'odd' : 'even');
-        } else {
-          if(isLast) classes.push('odd');
-          else classes.push('even');
-        }
-        classes.push('cut');
-      }
+    const prev = !isFirst ? this.segments[index - 1] : null;
+
+    const next = !isLast ? this.segments[index + 1] : null;
+
+    const cutLeft = !!prev && this.isSeatChanged(prev, current);
+    const cutRight = !!next && this.isSeatChanged(current, next);
+    if(prev)
+    {
+      console.log("prev:", this.isSeatChanged(prev, current));
     }
+    if(next)
+    {
+      console.log("next:", this.isSeatChanged(current, next));
+    }
+    //console.log(this.isSeatChanged(prev, current), this.isSeatChanged(current, next));
+    // Zmiana miejsca po obu stronach segmentu
+    if (cutLeft && cutRight) {
+      classes.push('two', 'cut');
+    }
+
+    // Zmiana miejsca po prawej
+    else if (cutRight) {
+      classes.push('even', 'cut');
+    }
+
+    // Zmiana miejsca po lewej
+    else if (cutLeft) {
+      classes.push('odd', 'cut');
+    }
+
+    console.log(`Segment ${index}:`, {
+      type,
+      cutLeft,
+      cutRight,
+      classes: classes.join(' '),
+    });
 
     return classes.join(' ');
   }
