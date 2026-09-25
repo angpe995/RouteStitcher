@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { shareReplay, tap } from 'rxjs';
 import { Station } from '../models/station';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class StationService {
   private stationsMap = new Map<number, string>();
 
   private stations$ = this.http
-    .get<Station[]>('http://localhost:5000/api/stations')
+    .get<Station[]>(`${environment.apiUrl}/stations`)
     .pipe(
       tap(stations => {
         stations.forEach(station => {

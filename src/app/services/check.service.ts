@@ -4,6 +4,7 @@ import { Brand, ConnectionDetail ,ApiCheckedConnection} from '../components/conn
 import { Observable, map, shareReplay } from 'rxjs';
 import { tap } from 'rxjs';
 import { ConnectionCard } from '../components/connection-card/connection-card';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,7 @@ import { ConnectionCard } from '../components/connection-card/connection-card';
 export class Check {
   private http = inject(HttpClient);
   checkConnection(connection: ConnectionDetail, NumberOfTickets: number, placeClass: number | null = null): Observable<ApiCheckedConnection[]> {
-    const url = `http://localhost:5000/api/${connection.id}/check`;
+    const url = `${environment.apiUrl}/${connection.id}/check`;
     console.log(url);
     return this.http.post<ApiCheckedConnection[]>(url, {
       tickets: NumberOfTickets,
